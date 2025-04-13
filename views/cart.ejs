@@ -1,0 +1,236 @@
+<%- include('./partials/header') %>
+
+<main class="bg-gray-50 min-h-screen">
+  <!-- Cart Section -->
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+    <!-- Page Header -->
+    <div class="mb-8">
+      <h1 class="text-3xl font-bold text-gray-900">Your Shopping Cart</h1>
+      <div class="mt-2 flex items-center text-gray-600">
+        <span><%= user.cart.length %> <%= user.cart.length === 1 ? 'item' : 'items' %></span>
+        <span class="mx-2">•</span>
+        <a href="/shop" class="text-green-600 hover:text-green-700 flex items-center">
+          Continue shopping
+          <i class="ri-arrow-right-line ml-1"></i>
+        </a>
+      </div>
+    </div>
+
+    <div class="flex flex-col lg:flex-row gap-8">
+      <!-- Cart Items -->
+      <div class="lg:w-2/3">
+        <% if(user.cart.length === 0) { %>
+          <div class="bg-white rounded-lg shadow-sm p-8 text-center">
+            <i class="ri-shopping-cart-line text-5xl text-gray-300 mb-4"></i>
+            <h3 class="text-xl font-medium text-gray-700 mb-2">Your cart is empty</h3>
+            <p class="text-gray-500 mb-6">Browse our products and add items to your cart</p>
+            <a href="/shop" class="inline-block px-6 py-3 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors">
+              Start Shopping
+            </a>
+          </div>
+        <% } else { %>
+          <div class="bg-white rounded-lg shadow-sm overflow-hidden">
+            <!-- Cart Items Header -->
+            <div class="hidden md:grid grid-cols-12 bg-gray-100 px-6 py-3 text-sm font-medium text-gray-700 uppercase tracking-wider">
+              <div class="col-span-6">Product</div>
+              <div class="col-span-3 text-center">Quantity</div>
+              <div class="col-span-3 text-right">Price</div>
+            </div>
+
+            <!-- Cart Items List -->
+            <div class="divide-y divide-gray-200">
+              <% user.cart.forEach((product) => { %>
+                <div class="grid grid-cols-1 md:grid-cols-12 gap-4 p-6 items-center">
+                  <!-- Product Image & Info -->
+                  <div class="md:col-span-6 flex items-center">
+                    <div class="flex-shrink-0 h-24 w-24 rounded-md overflow-hidden bg-gray-200 flex items-center justify-center">
+                      <img class="h-full w-full object-contain" 
+                           src="data:image/jpeg;base64,<%= product.image.toString('base64')%>" 
+                           alt="<%= product.name %>">
+                    </div>
+                    <div class="ml-4">
+                      <h3 class="text-lg font-medium text-gray-900"><%= product.name %></h3>
+                      <div class="mt-1 text-sm text-gray-500">SKU: <%= product._id.toString().slice(-6) %></div>
+                      <button class="mt-2 text-sm text-red-600 hover:text-red-800 flex items-center">
+                        <i class="ri-delete-bin-line mr-1"></i>
+                        Remove
+                      </button>
+                    </div>
+                  </div>
+
+                  <!-- Quantity Controls -->
+                  <div class="md:col-span-3 flex justify-center">
+                    <div class="flex items-center border border-gray-300 rounded-md">
+                      <button class="px-3 py-1 text-gray-600 hover:bg-gray-100">
+                        <i class="ri-subtract-line"></i>
+                      </button>
+                      <span class="px-4 py-1 text-center">1</span>
+                      <button class="px-3 py-1 text-gray-600 hover:bg-gray-100">
+                        <i class="ri-add-line"></i>
+                      </button>
+                    </div>
+                  </div>
+
+                  <!-- Price -->
+                  <div class="md:col-span-3 flex justify-end">
+                    <span class="text-lg font-medium">₹<%= product.price %></span>
+                  </div>
+                </div>
+              <% }); %>
+            </div>
+          </div>
+        <% } %>
+      </div>
+
+      <!-- Order Summary -->
+      <div class="lg:w-1/3">
+        <div class="bg-white rounded-lg shadow-sm p-6 sticky top-4">
+          <h2 class="text-xl font-bold text-gray-900 mb-6">Order Summary</h2>
+          
+          <div class="space-y-4">
+            <div class="flex justify-between">
+              <span class="text-gray-600">Subtotal (<%= user.cart.length %> items)</span>
+              <span class="font-medium">₹<%= bill %></span>
+            </div>
+            
+            <div class="flex justify-between">
+              <span class="text-gray-600">Discount</span>
+              <span class="text-green-600">-₹0</span>
+            </div>
+            
+            <div class="flex justify-between">
+              <span class="text-gray-600">Delivery</span>
+              <span class="text-green-600">FREE</span>
+            </div>
+            
+            <div class="flex justify-between">
+              <span class="text-gray-600">Platform Fee</span>
+              <span>₹20</span>
+            </div>
+            
+            <div class="border-t border-gray-200 pt-4 mt-4">
+              <div class="flex justify-between">
+                <span class="text-lg font-bold">Total</span>
+                <span class="text-lg font-bold">₹<%= bill + 20 %></span>
+              </div>
+            </div>
+            
+            <button class="w-full mt-6 bg-green-600 hover:bg-green-700 text-white py-3 px-4 rounded-lg font-medium transition-colors">
+              Proceed to Checkout
+            </button>
+            
+            <div class="mt-4 flex items-center text-sm text-gray-500">
+              <i class="ri-shield-check-line text-green-600 mr-2"></i>
+              <span>Secure SSL encrypted payment</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Recommended Products -->
+    <% if(recommended.length > 0) { %>
+      <div class="mt-16">
+        <div class="flex items-center mb-8">
+          <h2 class="text-2xl font-bold text-gray-900 flex-shrink-0 pr-4">You might also like</h2>
+          <div class="w-full border-t border-gray-300"></div>
+        </div>
+        
+        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+          <% recommended.forEach((product) => { %>
+            <div class="bg-white rounded-lg shadow-sm overflow-hidden hover:shadow-md transition-shadow">
+              <div class="h-48 bg-gray-100 flex items-center justify-center p-4">
+                <img class="h-full w-full object-contain" 
+                     src="data:image/jpeg;base64,<%= product.image.toString('base64') %>" 
+                     alt="<%= product.name %>"
+                     loading="lazy">
+              </div>
+              <div class="p-4">
+                <h3 class="font-medium text-gray-900 mb-1 truncate"><%= product.name %></h3>
+                <div class="flex justify-between items-center mt-3">
+                  <span class="font-bold">₹<%= product.price %></span>
+                  <button class="add-to-cart-btn" data-product-id="<%= product._id %>">
+                    <div class="w-9 h-9 rounded-full bg-green-600 flex items-center justify-center text-white hover:bg-green-700 transition-colors">
+                      <i class="ri-add-line"></i>
+                    </div>
+                  </button>
+                </div>
+              </div>
+            </div>
+          <% }); %>
+        </div>
+      </div>
+    <% } %>
+  </div>
+</main>
+
+<script>
+  // Quantity controls
+  document.querySelectorAll('.quantity-btn').forEach(button => {
+    button.addEventListener('click', function() {
+      const input = this.parentElement.querySelector('.quantity-input');
+      let value = parseInt(input.value);
+      
+      if (this.classList.contains('decrease')) {
+        value = value > 1 ? value - 1 : 1;
+      } else {
+        value = value + 1;
+      }
+      
+      input.value = value;
+      // Here you would typically update the cart via AJAX
+    });
+  });
+
+  // Remove item from cart
+  document.querySelectorAll('.remove-item-btn').forEach(button => {
+    button.addEventListener('click', function() {
+      const productId = this.getAttribute('data-product-id');
+      // AJAX call to remove item from cart
+      // Then reload the page or update the DOM
+    });
+  });
+
+  // Add to cart from recommended
+  document.querySelectorAll('.add-to-cart-btn').forEach(button => {
+    button.addEventListener('click', function() {
+      const productId = this.getAttribute('data-product-id');
+      fetch(`/addtocart/${productId}`, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      })
+      .then(response => response.json())
+      .then(data => {
+        if(data.success) {
+          // Show success message
+          const notification = document.createElement('div');
+          notification.className = 'fixed top-20 left-1/2 transform -translate-x-1/2 z-50';
+          notification.innerHTML = `
+            <div class="bg-green-500 text-white px-6 py-3 rounded-lg shadow-lg flex items-center animate-fade-in">
+              <i class="ri-checkbox-circle-fill mr-2"></i>
+              <span>${data.message || 'Item added to cart!'}</span>
+            </div>
+          `;
+          document.body.appendChild(notification);
+          
+          setTimeout(() => {
+            notification.querySelector('.animate-fade-in').classList.add('animate-fade-out');
+            setTimeout(() => notification.remove(), 500);
+          }, 3000);
+          
+          // Update cart count in header
+          const cartCount = document.querySelector('.cart-count');
+          if(cartCount) {
+            const currentCount = parseInt(cartCount.textContent) || 0;
+            cartCount.textContent = currentCount + 1;
+          }
+        }
+      })
+      .catch(error => console.error('Error:', error));
+    });
+  });
+</script>
+
+<%- include('./partials/footer') %>

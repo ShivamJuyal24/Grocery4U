@@ -3,7 +3,11 @@ const mongoose = require('mongoose');
 mongoose.connect("mongodb://127.0.0.1:27017/grocery");
 
 const ownerSchema = mongoose.Schema({
-    fullname: String,
+    fullname: {
+        type:String,
+        minLength: 3,
+        trim: true,
+    },
     email: String,
     password: String,
 
@@ -17,4 +21,4 @@ const ownerSchema = mongoose.Schema({
 
 });
 
-module.export = mongoose.model("owner",ownerSchema);
+module.exports = mongoose.model("owner",ownerSchema);

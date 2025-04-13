@@ -1,0 +1,186 @@
+<%- include('./partials/header') %>
+<link rel="stylesheet" href="/css/global.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+<% if(success.length > 0) { %>
+    <div class="fixed top-5 left-1/2 transform -translate-x-1/2 z-50">
+        <div class="bg-emerald-500 text-white px-6 py-3 rounded-lg shadow-lg flex items-center animate-fade-in-down">
+            <i class="fas fa-check-circle mr-2"></i>
+            <span><%= success %></span>
+        </div>
+    </div>
+<% } %>
+
+<div class="min-h-screen bg-gray-50">
+    <div class="flex">
+        <!-- Sidebar Navigation -->
+        <aside class="w-64 fixed h-screen bg-white shadow-md hidden md:block">
+            <div class="p-6">
+                <h2 class="text-xl font-bold text-gray-800">Admin Panel</h2>
+            </div>
+            <nav class="mt-6">
+                <div class="px-6 py-3 border-l-4 border-transparent hover:border-blue-500 hover:bg-blue-50 transition-all duration-200">
+                    <a href="/products" class="flex items-center text-gray-600 hover:text-blue-600">
+                        <i class="fas fa-box-open mr-3"></i>
+                        <span>All Products</span>
+                    </a>
+                </div>
+                <div class="px-6 py-3 border-l-4 border-blue-500 bg-blue-50">
+                    <a href="/product/create" class="flex items-center text-blue-600">
+                        <i class="fas fa-plus-circle mr-3"></i>
+                        <span>Create Product</span>
+                    </a>
+                </div>
+            </nav>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="md:ml-64 flex-1 p-8">
+            <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
+                <!-- Header -->
+                <div class="px-8 py-6 border-b border-gray-200">
+                    <div class="flex justify-between items-center">
+                        <h1 class="text-2xl font-semibold text-gray-800">Create New Product</h1>
+                    </div>
+                </div>
+
+                <!-- Form Content -->
+                <div class="p-8">
+                    <form autocomplete="off" action="/product/create" method="post" enctype="multipart/form-data">
+                        <!-- Product Details Section -->
+                        <section class="mb-10">
+                            <h2 class="text-lg font-medium text-gray-800 mb-6 pb-2 border-b border-gray-200">Product Information</h2>
+                            
+                            <!-- Image Upload -->
+                            <div class="mb-8">
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Product Image</label>
+                                <div class="mt-1 flex items-center">
+                                    <div class="relative">
+                                        <div class="flex items-center justify-center h-40 w-40 rounded-md border-2 border-dashed border-gray-300 overflow-hidden">
+                                            <div class="image-preview hidden absolute inset-0 bg-cover bg-center"></div>
+                                            <div class="text-center upload-placeholder">
+                                                <i class="fas fa-camera text-3xl text-gray-400 mb-2"></i>
+                                                <p class="text-xs text-gray-500">Upload product image</p>
+                                            </div>
+                                        </div>
+                                        <input name="image" type="file" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer" accept="image/*">
+                                    </div>
+                                    <div class="ml-4 text-sm text-gray-500">
+                                        <p>JPEG, PNG or GIF (Recommended: 800x800px)</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Basic Info -->
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-1">Product Name *</label>
+                                    <input name="name" type="text" required 
+                                        class="w-full px-4 py-2.5 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all">
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-1">Price *</label>
+                                    <div class="relative">
+                                        <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                            <span class="text-gray-500">Rs</span>
+                                        </div>
+                                        <input name="price" type="text" required 
+                                            class="w-full pl-8 pr-4 py-2.5 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all">
+                                    </div>
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-1">Category *</label>
+                                    <input name="category" type="text" required 
+                                        class="w-full px-4 py-2.5 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all">
+                                </div>
+                            </div>
+                        </section>
+
+                        <!-- Panel Design Section -->
+                        <section class="mb-10">
+                            <h2 class="text-lg font-medium text-gray-800 mb-6 pb-2 border-b border-gray-200">Panel Design</h2>
+                            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-1">Background Color</label>
+                                    <div class="flex items-center">
+                                        <input name="bgcolor" type="text" placeholder="#FFFFFF" 
+                                            class="w-full px-4 py-2.5 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all">
+                                        <div class="color-preview ml-2 h-10 w-10 rounded border border-gray-300"></div>
+                                    </div>
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-1">Panel Color</label>
+                                    <div class="flex items-center">
+                                        <input name="panelcolor" type="text" placeholder="#F3F4F6" 
+                                            class="w-full px-4 py-2.5 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all">
+                                        <div class="color-preview ml-2 h-10 w-10 rounded border border-gray-300"></div>
+                                    </div>
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-1">Text Color</label>
+                                    <div class="flex items-center">
+                                        <input name="textcolor" type="text" placeholder="#111827" 
+                                            class="w-full px-4 py-2.5 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all">
+                                        <div class="color-preview ml-2 h-10 w-10 rounded border border-gray-300"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </section>
+
+                        <!-- Additional Information -->
+                        <section class="mb-10">
+                            <h2 class="text-lg font-medium text-gray-800 mb-6 pb-2 border-b border-gray-200">Additional Information</h2>
+                            <div class="grid grid-cols-1 gap-6">
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-1">Tags</label>
+                                    <input name="tags" type="text" placeholder="e.g. dairy, fresh, organic" 
+                                        class="w-full px-4 py-2.5 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all">
+                                    <p class="mt-1 text-xs text-gray-500">Separate tags with commas</p>
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-1">Description</label>
+                                    <textarea name="description" rows="4" 
+                                        class="w-full px-4 py-2.5 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all"></textarea>
+                                </div>
+                            </div>
+                        </section>
+
+                        <!-- Form Actions -->
+                        <div class="flex justify-end pt-6 border-t border-gray-200">
+                            <button type="submit" class="px-8 py-3 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-lg shadow-sm transition-all flex items-center">
+                                <i class="fas fa-save mr-2"></i> Create Product
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </main>
+    </div>
+</div>
+
+<script>
+    // Image preview functionality
+    document.querySelector('input[name="image"]').addEventListener('change', function(e) {
+        const file = e.target.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = function(event) {
+                const preview = document.querySelector('.image-preview');
+                preview.style.backgroundImage = `url(${event.target.result})`;
+                preview.classList.remove('hidden');
+                document.querySelector('.upload-placeholder').classList.add('hidden');
+            }
+            reader.readAsDataURL(file);
+        }
+    });
+
+    // Color preview functionality
+    document.querySelectorAll('input[name="bgcolor"], input[name="panelcolor"], input[name="textcolor"]').forEach(input => {
+        input.addEventListener('input', function() {
+            const preview = this.parentElement.querySelector('.color-preview');
+            preview.style.backgroundColor = this.value || '#FFFFFF';
+        });
+    });
+</script>
+
+<%- include('./partials/footer') %>
