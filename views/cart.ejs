@@ -114,11 +114,15 @@
                 <span class="text-lg font-bold">₹<%= bill + 20 %></span>
               </div>
             </div>
-            
-            <button class="w-full mt-6 bg-green-600 hover:bg-green-700 text-white py-3 px-4 rounded-lg font-medium transition-colors">
+
+            <!-- Checkout Button -->
+            <button 
+              id="checkout-button" 
+              class="w-full mt-6 bg-green-600 hover:bg-green-700 text-white py-3 px-4 rounded-lg font-medium transition-colors"
+            >
               Proceed to Checkout
             </button>
-            
+
             <div class="mt-4 flex items-center text-sm text-gray-500">
               <i class="ri-shield-check-line text-green-600 mr-2"></i>
               <span>Secure SSL encrypted payment</span>
@@ -164,19 +168,58 @@
   </div>
 </main>
 
+<!-- Stripe Checkout Script -->
+<script src="https://js.stripe.com/v3/"></script>
+<script>
+  const stripe = Stripe('<%= process.env.STRIPE_PUBLIC_KEY %>');
+
+  document.getElementById('checkout-button').addEventListener('click', async () => {
+    const button = document.getElementById('checkout-button');
+    button.disabled = true;
+    button.innerHTML = 'Processing...';
+
+    try {
+      const response = await fetch('/create-checkout-session', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+
+      const session = await response.json();
+
+      if (session.error) {
+        throw new Error(session.error);
+      }
+
+      const result = await stripe.redirectToCheckout({ sessionId: session.id });
+
+      if (result.error) {
+        throw new Error(result.error.message);
+      }
+    } catch (error) {
+      console.error('Error:', error);
+      alert('Error during checkout: ' + error.message);
+      button.disabled = false;
+      button.innerHTML = 'Proceed to Checkout';
+    }
+  });
+</script>
+
+<!-- Existing JS for cart functionality -->
 <script>
   // Quantity controls
   document.querySelectorAll('.quantity-btn').forEach(button => {
     button.addEventListener('click', function() {
       const input = this.parentElement.querySelector('.quantity-input');
       let value = parseInt(input.value);
-      
+
       if (this.classList.contains('decrease')) {
         value = value > 1 ? value - 1 : 1;
       } else {
         value = value + 1;
       }
-      
+
       input.value = value;
       // Here you would typically update the cart via AJAX
     });
@@ -204,7 +247,6 @@
       .then(response => response.json())
       .then(data => {
         if(data.success) {
-          // Show success message
           const notification = document.createElement('div');
           notification.className = 'fixed top-20 left-1/2 transform -translate-x-1/2 z-50';
           notification.innerHTML = `
@@ -214,13 +256,12 @@
             </div>
           `;
           document.body.appendChild(notification);
-          
+
           setTimeout(() => {
             notification.querySelector('.animate-fade-in').classList.add('animate-fade-out');
             setTimeout(() => notification.remove(), 500);
           }, 3000);
-          
-          // Update cart count in header
+
           const cartCount = document.querySelector('.cart-count');
           if(cartCount) {
             const currentCount = parseInt(cartCount.textContent) || 0;

@@ -10,6 +10,7 @@ const productsRouter = require("./routes/productsRouter");
 require("dotenv").config();
 const indexRouter = require("./routes/indexRouter");
 const db = require("./config/mongoose-connection");
+const paymentRoutes = require('./routes/payments');
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -32,6 +33,7 @@ app.use("/", indexRouter);
 app.use("/owners", ownersRouter);
 app.use("/users", usersRouter);
 app.use("/product", productsRouter);
+app.use(paymentRoutes);
 
 
 // ✅ Add a port message for clarity
