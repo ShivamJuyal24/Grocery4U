@@ -1,6 +1,6 @@
 # 🛒 Grocery4U
 
-**Grocery4U** is a modern, user-friendly web application that allows users to browse, search, and shop a wide variety of grocery products online. Built with React and MongoDB, it features dynamic product displays, cart management, and personalized recommendations using product tags and categories.
+**Grocery4U** is a modern, user-friendly fullstack web application that allows users to browse, search, and shop a wide variety of grocery products online. Built with EJS and MongoDB, it features dynamic product displays, cart management, and personalized recommendations using product tags and categories.
 
 ## 🚀 Features
 
@@ -16,6 +16,7 @@
 - **Frontend**: EJS
 - **Backend**: Node.js, Express.js
 - **Database**: MongoDB (Mongoose ODM)
+- **Payments**: Stripe integration for secure checkout
 
 
 ## 🧠 Recommendation Logic
