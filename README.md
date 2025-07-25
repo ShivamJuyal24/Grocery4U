@@ -131,10 +131,6 @@ npx nodemon app.js
 ## Built with ❤️ by Shivam Juyal
 
 
----
-
-Let me know if you want to include things like contribution guidelines, API documentation, or deployment instructions!
-
 
 
 
